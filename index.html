@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d111d">
+  <title>Arboria · Season explorer</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="scene.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="sprig" viewBox="0 0 28 28"><path d="M6 25c4-7 9-14 15-21M12 16C4 17 3 12 3 9c6 0 10 2 9 7Zm3-6C9 9 10 5 10 2c5 1 7 4 5 8Zm1 0c0-6 4-8 9-8-1 5-3 8-9 8Zm-4 8c4-6 8-6 12-6-1 5-5 9-12 6Z"/></symbol>
+      <symbol id="flower" viewBox="0 0 24 24"><path d="M9.5 8C6.6.7 17.4.7 14.5 8 21 3.5 24.3 13.7 16.5 13.5c6.3 4.8-2.4 11.1-4.5 3.6-2.1 7.5-10.8 1.2-4.5-3.6C-.3 13.7 3 3.5 9.5 8Z"/><circle cx="12" cy="11.7" r="2"/></symbol>
+      <symbol id="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol>
+      <symbol id="leaf" viewBox="0 0 24 24"><path d="M20 3C10 3 3 6 4 13c.6 4.8 6 6.9 10.4 3.8C18.5 14 20 8.5 20 3ZM3 21l12-12"/></symbol>
+      <symbol id="snow" viewBox="0 0 24 24"><path d="M12 2v20M3.4 7l17.2 10M3.4 17 20.6 7M9.4 3.7 12 6l2.6-2.3m-5.2 16.6L12 18l2.6 2.3M3.7 10.2 7 9l-.6-3.4m11.2 12.8L17 15l3.3-1.2M6.4 18.4 7 15l-3.3-1.2m16.6-3.6L17 9l.6-3.4"/></symbol>
+      <symbol id="wind" viewBox="0 0 24 24"><path d="M3 9h11c4.5 0 4.5-6 1-6-2 0-2.8 1.4-2.8 2.5M2 13h17c4 0 4-5 1-5M5 17h8c4.2 0 4.2 5.5.7 5.5"/></symbol>
+      <symbol id="sound" viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4Zm12-1c2 2 2 6 0 8m3-11c4 4 4 10 0 14"/></symbol>
+      <symbol id="mute" viewBox="0 0 24 24"><path d="M3 9h4l5-4v14l-5-4H3Zm13 1 5 5m0-5-5 5"/></symbol>
+      <symbol id="expand" viewBox="0 0 24 24"><path d="M4 9V4h5m6 0h5v5m0 6v5h-5m-6 0H4v-5"/></symbol>
+      <symbol id="collapse" viewBox="0 0 24 24"><path d="M9 4v5H4m16 0h-5V4M4 15h5v5m6 0v-5h5"/></symbol>
+      <symbol id="play" viewBox="0 0 24 24"><path d="M7 4.5 19 12 7 19.5Z" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="pause" viewBox="0 0 24 24"><path d="M8 5v14m8-14v14" stroke-width="3"/></symbol>
+      <symbol id="timeline" viewBox="0 0 24 24"><path d="M3 6h5m5 0h8M3 12h11m5 0h2M3 18h2m5 0h11"/><circle cx="10.5" cy="6" r="2.25"/><circle cx="16.5" cy="12" r="2.25"/><circle cx="7.5" cy="18" r="2.25"/></symbol>
+    </defs>
+  </svg>
+  <main id="explorer">
+    <canvas id="landscape" aria-hidden="true"></canvas>
+    <div id="tree" aria-hidden="true"><canvas id="canopy"></canvas></div>
+    <canvas id="weather" aria-hidden="true"></canvas>
+    <header>
+      <div class="brand"><span class="brand-mark"><svg><use href="#sprig"/></svg></span>Arboria</div>
+      <div class="header-tools">
+        <button id="audio" class="pill" aria-pressed="false"><svg><use href="#mute"/></svg><span>Sound off</span></button>
+        <button id="fullscreen" class="round" aria-label="Enter fullscreen" title="Enter fullscreen"><svg><use href="#expand"/></svg></button>
+      </div>
+    </header>
+    <section class="season-info" aria-labelledby="season-name">
+      <div class="eyebrow"><i></i> Current season</div>
+      <h1 id="season-name">Spring</h1>
+      <div class="effect"><svg><use href="#wind"/></svg><span id="effect-name">Drifting petals</span></div>
+    </section>
+    <section class="timeline-panel" aria-labelledby="timeline-name">
+      <div class="timeline-heading"><h2 id="timeline-name"><svg><use href="#timeline"/></svg>Season timeline</h2>
+        <button class="pill cycle" id="cycle" aria-pressed="false"><svg><use href="#play"/></svg><span>Auto-cycle</span></button>
+      </div>
+      <div class="slider-area">
+        <div class="rail" aria-hidden="true"><b></b><b></b><b></b><b></b></div>
+        <input type="range" id="season" min="0" max="300" value="0" aria-label="Season" aria-valuetext="Spring">
+        <div class="stops">
+          <button class="stop active" data-season="0" aria-pressed="true"><svg><use href="#flower"/></svg>Spring</button>
+          <button class="stop" data-season="1" aria-pressed="false"><svg><use href="#sun"/></svg>Summer</button>
+          <button class="stop" data-season="2" aria-pressed="false"><svg><use href="#leaf"/></svg>Autumn</button>
+          <button class="stop" data-season="3" aria-pressed="false"><svg><use href="#snow"/></svg>Winter</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
